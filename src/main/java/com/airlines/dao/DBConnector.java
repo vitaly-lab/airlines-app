@@ -1,5 +1,6 @@
 package com.airlines.dao;
 
+import com.airlines.exception.DatabaseConnectivityException;
 import com.mysql.cj.jdbc.MysqlDataSource;
 
 import java.sql.Connection;
@@ -8,22 +9,22 @@ import java.util.ResourceBundle;
 
 public class DBConnector {
 
-    private MysqlDataSource dataSource = new MysqlDataSource();
+    private final MysqlDataSource dataSource = new MysqlDataSource();
 
     public DBConnector() {
-        ResourceBundle appResource = ResourceBundle.getBundle("application");
-        dataSource.setUser(appResource.getString("jdbcUsername"));
-        dataSource.setPassword(appResource.getString("jdbcPassword"));
-        dataSource.setUrl(appResource.getString("jdbcURL"));
+        ResourceBundle resource = ResourceBundle.getBundle("application");
+        dataSource.setUser(resource.getString("jdbcUsername"));
+        dataSource.setPassword(resource.getString("jdbcPassword"));
+        dataSource.setUrl(resource.getString("jdbcURL"));
         dataSource.setDatabaseName("airlines");
     }
 
-    public Connection getConnection() {
+    public Connection getConnection() throws DatabaseConnectivityException {
 
         try {
             return dataSource.getConnection();
         } catch (SQLException e) {
-            throw new RuntimeException("Can not obtain database connection");
+            throw new DatabaseConnectivityException("Database connection could not be obtained", e);
         }
     }
 }

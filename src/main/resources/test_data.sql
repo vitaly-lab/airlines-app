@@ -5,7 +5,7 @@ INSERT INTO crew_members VALUES ('4', 'Sandra', 'Cooper', 'stewardess', '1989-09
 INSERT INTO crew_members VALUES ('5', 'Didrih', 'Kolc', 'captain of the ship', '1978-03-05', 'Germany');
 INSERT INTO crew_members VALUES ('6', 'Peter', 'Stock', 'first pilot', '1979-07-30', 'USA');
 INSERT INTO crew_members VALUES ('7', 'Stiv', 'Jocker', 'board conductor', '1987-10-17', 'UK');
-INSERT INTO crew_members VALUES ('8', 'Anna', 'Bush', 'stewardess', '2000-12-09', 'Austia');
+INSERT INTO crew_members VALUES ('8', 'Anna', 'Bush', 'stewardess', '2000-12-09', 'Austria');
 INSERT INTO crew_members VALUES ('9', 'Peter', 'Stock', 'first pilot', '1979-07-30', 'USA');
 INSERT INTO crew_members VALUES ('10', 'Stiv', 'Jocker', 'board conductor', '1987-10-17', 'UK');
 
