@@ -19,8 +19,7 @@ public class DBConnector {
         dataSource.setDatabaseName("airlines");
     }
 
-    public Connection getConnection() throws DatabaseConnectivityException {
-
+    public Connection getConnection() {
         try {
             return dataSource.getConnection();
         } catch (SQLException e) {
