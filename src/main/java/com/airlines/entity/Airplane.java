@@ -5,20 +5,20 @@ import java.time.LocalDate;
 public class Airplane {
     private final int id;
     private final String codeName;
-    private final String model;
-    private final LocalDate manufacture;
+    private Model model;
+    private final LocalDate manufactureDate;
     private final int capacity;
     private final int flightRange;
-    private final int crews_id;
+    private final int crewId;
 
-    private Airplane(int id, String codeName, String model, LocalDate manufacture, int capacity, int flightRange, int crews_id) {
-        this.id = id;
-        this.codeName = codeName;
-        this.model = model;
-        this.manufacture = manufacture;
-        this.capacity = capacity;
-        this.flightRange = flightRange;
-        this.crews_id = crews_id;
+    private Airplane(Builder builder) {
+        this.id = builder.id;
+        this.codeName = builder.codeName;
+        this.model = builder.model;
+        this.manufactureDate = builder.manufactureDate;
+        this.capacity = builder.capacity;
+        this.flightRange = builder.flightRange;
+        this.crewId = builder.crewId;
     }
 
     public int getId() {
@@ -29,12 +29,12 @@ public class Airplane {
         return codeName;
     }
 
-    public String getModel() {
+    public Model getModel() {
         return model;
     }
 
     public LocalDate getManufacture() {
-        return manufacture;
+        return manufactureDate;
     }
 
     public int getCapacity() {
@@ -46,18 +46,22 @@ public class Airplane {
     }
 
     public int getCrews_id() {
-        return crews_id;
+        return crewId;
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static class Builder {
 
         private int id;
         private String codeName;
-        private String model;
-        private LocalDate manufacture;
+        private Model model;
+        private LocalDate manufactureDate;
         private int capacity;
         private int flightRange;
-        private int crews_id;
+        private int crewId;
 
         public Builder withId(int id) {
             this.id = id;
@@ -69,8 +73,13 @@ public class Airplane {
             return this;
         }
 
-        public Builder withModel(LocalDate manufacture) {
-            this.manufacture = manufacture;
+        public Builder withModel(Model model) {
+            this.model = model;
+            return this;
+        }
+
+        public Builder withManufacture(LocalDate manufactureDate) {
+            this.manufactureDate = manufactureDate;
             return this;
         }
 
@@ -79,9 +88,13 @@ public class Airplane {
             return this;
         }
 
-        public Builder withFlightRange(int crews_id) {
-            this.crews_id = crews_id;
+        public Builder withFlightRange(int crewId) {
+            this.crewId = crewId;
             return this;
+        }
+
+        public Airplane build() {
+            return new Airplane(this);
         }
     }
 }

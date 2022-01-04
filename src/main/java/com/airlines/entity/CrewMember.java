@@ -6,17 +6,17 @@ public class CrewMember {
     private final int id;
     private final String firsName;
     private final String lastName;
-    private final String position;
+    private final Position position;
     private final LocalDate birthday;
-    private final String citizenship;
+    private final Citizenship citizenship;
 
-    private CrewMember(int id, String firsName, String lastName, String position, LocalDate birthday, String citizenship) {
-        this.id = id;
-        this.firsName = firsName;
-        this.lastName = lastName;
-        this.position = position;
-        this.birthday = birthday;
-        this.citizenship = citizenship;
+    private CrewMember(Builder builder) {
+        this.id = builder.id;
+        this.firsName = builder.firsName;
+        this.lastName = builder.lastName;
+        this.position = builder.position;
+        this.birthday = builder.birthday;
+        this.citizenship = builder.citizenship;
     }
 
     public int getId() {
@@ -31,7 +31,7 @@ public class CrewMember {
         return lastName;
     }
 
-    public String getPosition() {
+    public Position getPosition() {
         return position;
     }
 
@@ -39,17 +39,21 @@ public class CrewMember {
         return birthday;
     }
 
-    public String getCitizenship() {
+    public Citizenship getCitizenship() {
         return citizenship;
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static class Builder {
         private int id;
         private String firsName;
         private String lastName;
-        private String position;
+        private Position position;
         private LocalDate birthday;
-        private String citizenship;
+        private Citizenship citizenship;
 
         public Builder withId(int id) {
             this.id = id;
@@ -66,7 +70,7 @@ public class CrewMember {
             return this;
         }
 
-        public Builder withPosition(String position) {
+        public Builder withPosition(Position position) {
             this.position = position;
             return this;
         }
@@ -76,9 +80,13 @@ public class CrewMember {
             return this;
         }
 
-        public Builder withCitizenship(String citizenship) {
+        public Builder withCitizenship(Citizenship citizenship) {
             this.citizenship = citizenship;
             return this;
+        }
+
+        public CrewMember build() {
+            return new CrewMember(this);
         }
     }
 }

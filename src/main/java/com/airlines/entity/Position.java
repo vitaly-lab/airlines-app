@@ -1,6 +1,6 @@
 package com.airlines.entity;
 
-public enum Speciality {
+public enum Position {
     CAPTAIN_OF_THE_SHIP,
     FIRST_PILOT,
     BOARD_CONDUCTOR,

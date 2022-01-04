@@ -4,9 +4,9 @@ public class Crew {
     private final int id;
     private final String name;
 
-    private Crew(int id, String name) {
-        this.id = id;
-        this.name = name;
+    private Crew(Builder builder) {
+        this.id = builder.id;
+        this.name = builder.name;
     }
 
     public int getId() {
@@ -15,6 +15,10 @@ public class Crew {
 
     public String getName() {
         return name;
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static class Builder {
@@ -29,6 +33,10 @@ public class Crew {
         public Builder withName(int id) {
             this.name = name;
             return this;
+        }
+
+        public Crew build() {
+            return new Crew(this);
         }
     }
 }

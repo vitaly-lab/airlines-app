@@ -1,6 +1,6 @@
 package com.airlines.entity;
 
-public enum Country {
+public enum Citizenship {
     USA,
     UK,
     AUSTRALIA,
