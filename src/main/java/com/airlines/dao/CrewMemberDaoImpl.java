@@ -14,9 +14,9 @@ import java.sql.SQLException;
 
 public class CrewMemberDaoImpl implements CrewMemberDao {
 
-    private final static String INSERT_CREW_MEMBER_SQL = "INSERT INTO crew_members(first_name, last_name, position, birthday, citizenship) VALUES (?, ?, ?, ?, ?);";
-    private final static String SELECT_CREW_MEMBER_BY_ID_SQL = "SELECT * FROM crew_members WHERE id = ?;";
-    private final static String UPDATE_CREW_MEMBER_SQL = "UPDATE crew_members SET first_name =?, last_name = ?, position = ?, birthday = ?, citizenship = ? WHERE id = ?;";
+    private static final String INSERT_CREW_MEMBER_SQL = "INSERT INTO crew_members(first_name, last_name, position, birthday, citizenship) VALUES (?, ?, ?, ?, ?);";
+    private static final String SELECT_CREW_MEMBER_BY_ID_SQL = "SELECT * FROM crew_members WHERE id = ?;";
+    private static final String UPDATE_CREW_MEMBER_SQL = "UPDATE crew_members SET first_name =?, last_name = ?, position = ?, birthday = ?, citizenship = ? WHERE id = ?;";
 
     private DataSource dataSource;
 
@@ -35,7 +35,7 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
 
     private void saveCrewMember(CrewMember crewMember, Connection connection) throws SQLException {
         PreparedStatement insertStatement = prepareInsertStatement(connection, crewMember);
-        executeUpdate(insertStatement, "crewmember was not created");
+        executeUpdate(insertStatement, "Сrewmember was not created");
         int id = fetchGeneratedId(insertStatement);
         CrewMember.builder().withId(id).build();
 
@@ -46,7 +46,7 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
             PreparedStatement insertStatement = connection.prepareStatement(INSERT_CREW_MEMBER_SQL, PreparedStatement.RETURN_GENERATED_KEYS);
             return fillStatementWithAccountData(insertStatement, crewMember);
         } catch (SQLException e) {
-            throw new DaoOperationException("Cannot prepare statement to insert crewmember", e);
+            throw new DaoOperationException("Cannot prepare statement to insert Сrewmember", e);
         }
     }
 
@@ -73,7 +73,7 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
         if (generatedKeys.next()) {
             return generatedKeys.getInt(1);
         } else {
-            throw new DaoOperationException("Can not obtain an crewmember id");
+            throw new DaoOperationException("Can not obtain an Сrewmember id");
         }
     }
 
@@ -81,7 +81,7 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
         try (Connection connection = dataSource.getConnection()) {
             return findCrewMemberById(id, connection);
         } catch (SQLException e) {
-            throw new DaoOperationException(String.format("Cannot find crewmember by id = %d", id), e);
+            throw new DaoOperationException(String.format("Cannot find Сrewmember by id = %d", id), e);
         }
     }
 
@@ -98,7 +98,7 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
             selectByIdStatement.setLong(1, id);
             return selectByIdStatement;
         } catch (SQLException e) {
-            throw new DaoOperationException("Cannot prepare statement to select crewmember by id", e);
+            throw new DaoOperationException("Cannot prepare statement to select Сrewmember by id", e);
         }
     }
 
@@ -118,9 +118,9 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
     public void update(CrewMember crewMember) {
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement updateStatement = prepareUpdateStatement(crewMember, connection);
-            executeUpdate(updateStatement, "crewmember was not updated");
+            executeUpdate(updateStatement, "Сrewmember was not updated");
         } catch (SQLException e) {
-            throw new DaoOperationException(String.format("Cannot update crewmember with id = %d", crewMember.getId()), e);
+            throw new DaoOperationException(String.format("Cannot update Сrewmember with id = %d", crewMember.getId()), e);
         }
     }
 
@@ -131,7 +131,7 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
             updateStatement.setLong(7, crewMember.getId());
             return updateStatement;
         } catch (SQLException e) {
-            throw new DaoOperationException(String.format("Cannot prepare update statement for crewmember id = %d", crewMember.getId()), e);
+            throw new DaoOperationException(String.format("Cannot prepare update statement for Сrewmember id = %d", crewMember.getId()), e);
         }
     }
 }
