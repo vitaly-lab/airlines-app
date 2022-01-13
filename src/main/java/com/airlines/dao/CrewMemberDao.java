@@ -4,7 +4,7 @@ import com.airlines.entity.CrewMember;
 
 public interface CrewMemberDao {
 
-    void save(CrewMember account);
+    void save(CrewMember crewMember);
 
     CrewMember findOne(int id);
 

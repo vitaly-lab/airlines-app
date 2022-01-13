@@ -14,9 +14,10 @@ import java.sql.SQLException;
 
 public class CrewMemberDaoImpl implements CrewMemberDao {
 
-    private final static String INSERT_CREWMEMBER_SQL = "INSERT INTO crew_members(first_name, last_name, position, birthday, citizenship) VALUES (?, ?, ?, ?, ?);";
-    private final static String SELECT_CREWMEMBER_BY_ID_SQL = "SELECT * FROM crew_members WHERE id = ?;";
-    private final static String UPDATE_CREWMEMBER_SQL = "UPDATE crew_members SET first_name =?, last_name = ?, position = ?, birthday = ?, citizenship = ? WHERE id = ?;";
+    private final static String INSERT_CREW_MEMBER_SQL = "INSERT INTO crew_members(first_name, last_name, position, birthday, citizenship) VALUES (?, ?, ?, ?, ?);";
+    private final static String SELECT_CREW_MEMBER_BY_ID_SQL = "SELECT * FROM crew_members WHERE id = ?;";
+    private final static String UPDATE_CREW_MEMBER_SQL = "UPDATE crew_members SET first_name =?, last_name = ?, position = ?, birthday = ?, citizenship = ? WHERE id = ?;";
+
     private DataSource dataSource;
 
     public CrewMemberDaoImpl(DataSource dataSource) {
@@ -34,7 +35,7 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
 
     private void saveCrewMember(CrewMember crewMember, Connection connection) throws SQLException {
         PreparedStatement insertStatement = prepareInsertStatement(connection, crewMember);
-        executeUpdate(insertStatement, "Account was not created");
+        executeUpdate(insertStatement, "crewmember was not created");
         int id = fetchGeneratedId(insertStatement);
         CrewMember.builder().withId(id).build();
 
@@ -42,10 +43,10 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
 
     private PreparedStatement prepareInsertStatement(Connection connection, CrewMember crewMember) {
         try {
-            PreparedStatement insertStatement = connection.prepareStatement(INSERT_CREWMEMBER_SQL, PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement insertStatement = connection.prepareStatement(INSERT_CREW_MEMBER_SQL, PreparedStatement.RETURN_GENERATED_KEYS);
             return fillStatementWithAccountData(insertStatement, crewMember);
         } catch (SQLException e) {
-            throw new DaoOperationException("Cannot prepare statement to insert account", e);
+            throw new DaoOperationException("Cannot prepare statement to insert crewmember", e);
         }
     }
 
@@ -72,7 +73,7 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
         if (generatedKeys.next()) {
             return generatedKeys.getInt(1);
         } else {
-            throw new DaoOperationException("Can not obtain an account ID");
+            throw new DaoOperationException("Can not obtain an crewmember id");
         }
     }
 
@@ -80,7 +81,7 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
         try (Connection connection = dataSource.getConnection()) {
             return findCrewMemberById(id, connection);
         } catch (SQLException e) {
-            throw new DaoOperationException(String.format("Cannot find Account by id = %d", id), e);
+            throw new DaoOperationException(String.format("Cannot find crewmember by id = %d", id), e);
         }
     }
 
@@ -93,53 +94,44 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
 
     private PreparedStatement prepareSelectByIdStatement(int id, Connection connection) {
         try {
-            PreparedStatement selectByIdStatement = connection.prepareStatement(SELECT_CREWMEMBER_BY_ID_SQL);
+            PreparedStatement selectByIdStatement = connection.prepareStatement(SELECT_CREW_MEMBER_BY_ID_SQL);
             selectByIdStatement.setLong(1, id);
             return selectByIdStatement;
         } catch (SQLException e) {
-            throw new DaoOperationException("Cannot prepare statement to select account by id", e);
+            throw new DaoOperationException("Cannot prepare statement to select crewmember by id", e);
         }
     }
 
     private CrewMember parseRow(ResultSet resultSet) throws SQLException {
-        CrewMember crewMember = CrewMember.builder()
+
+        return CrewMember.builder()
                 .withId(resultSet.getInt("id"))
                 .withFirsName(resultSet.getString("first_name"))
                 .withLastName(resultSet.getString("last_name"))
                 .withBirthday(resultSet.getDate("birthday").toLocalDate())
-                .withPosition(Position.BOARD_CONDUCTOR)
-                .withPosition(Position.FIRST_PILOT)
-                .withPosition(Position.STEWARDESS)
-                .withPosition(Position.FIRST_PILOT)
-                .withCitizenship(Citizenship.AUSTRIA)
-                .withCitizenship(Citizenship.AUSTRALIA)
-                .withCitizenship(Citizenship.GERMANY)
-                .withCitizenship(Citizenship.NEW_ZEALAND)
-                .withCitizenship(Citizenship.UK)
-                .withCitizenship(Citizenship.USA)
+                .withPosition(Position.valueOf(resultSet.getString("position")))
+                .withCitizenship(Citizenship.valueOf(resultSet.getString("citizenship")))
                 .build();
-
-        return crewMember;
     }
 
     @Override
     public void update(CrewMember crewMember) {
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement updateStatement = prepareUpdateStatement(crewMember, connection);
-            executeUpdate(updateStatement, "Account was not updated");
+            executeUpdate(updateStatement, "crewmember was not updated");
         } catch (SQLException e) {
-            throw new DaoOperationException(String.format("Cannot update Account with id = %d", crewMember.getId()), e);
+            throw new DaoOperationException(String.format("Cannot update crewmember with id = %d", crewMember.getId()), e);
         }
     }
 
     private PreparedStatement prepareUpdateStatement(CrewMember crewMember, Connection connection) {
         try {
-            PreparedStatement updateStatement = connection.prepareStatement(UPDATE_CREWMEMBER_SQL);
+            PreparedStatement updateStatement = connection.prepareStatement(UPDATE_CREW_MEMBER_SQL);
             fillStatementWithAccountData(updateStatement, crewMember);
             updateStatement.setLong(7, crewMember.getId());
             return updateStatement;
         } catch (SQLException e) {
-            throw new DaoOperationException(String.format("Cannot prepare update statement for account id = %d", crewMember.getId()), e);
+            throw new DaoOperationException(String.format("Cannot prepare update statement for crewmember id = %d", crewMember.getId()), e);
         }
     }
 }
