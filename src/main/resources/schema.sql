@@ -40,9 +40,9 @@ CREATE TABLE crew_members
 
 CREATE TABLE crews_crew_members
 (
-    crews_id        INT NOT NULL,
+    crew_id        INT NOT NULL,
     crew_members_id INT NOT NULL,
-    PRIMARY KEY (crews_id, crew_members_id),
+    PRIMARY KEY (crew_id, crew_members_id),
     CONSTRAINT FK_crew_members_id FOREIGN KEY (crew_members_id) REFERENCES crew_members (id),
-    CONSTRAINT FK_crews_crew_members FOREIGN KEY (crews_id) REFERENCES crews (id)
+    CONSTRAINT FK_crews_crew_members FOREIGN KEY (crew_id) REFERENCES crews (id)
 );
