@@ -9,7 +9,7 @@ public interface CrewDao {
 
     void addMemberToCrew(CrewMember crewMember, Crew crew);
 
-    List<CrewMember> findCrewMembersById(int idCrew);
+    List<CrewMember> findCrewMembersById(int crewId);
 
-    List<CrewMember> findCrewMembersByName(String nameCrew);
+    List<CrewMember> findCrewMembersByName(String crewName);
 }

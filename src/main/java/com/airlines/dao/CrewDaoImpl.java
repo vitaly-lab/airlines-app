@@ -14,23 +14,23 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CrewDaoImp implements CrewDao {
+public class CrewDaoImpl implements CrewDao {
     private static final String INSERT_CREWS_CREW_MEMBERS = "INSERT INTO crews_crew_members (crews_id, crew_members_id) VALUES(?, ?);";
-    private static final String SELECT_CREW_MEMBERS_BY_CREW__ID =
-    "SELECT * FROM crew_members  " +
-            "LEFT JOIN crews_crew_members " +
-            "ON crew_members.id = crews_crew_members.crews_members_id " +
-            "WHERE crews_crew_members.crews_id=?;";
+    private static final String SELECT_CREW_MEMBERS_BY_CREW_ID =
+            "SELECT * FROM crew_members " +
+                    "LEFT JOIN crews_crew_members " +
+                    "ON crew_members.id = crews_crew_members.crews_members_id " +
+                    "WHERE crews_crew_members.crews_id=?;";
 
-    private static final String SELECT_CREW_MEMBERS_BY_CREW__NAME =
-               "SELECT *" +
-               "FROM crew_members " +
-               "LEFT JOIN (crews_crew_members JOIN crew USING (crew_name))" +
-               "USING (crew_members_id) WHERE crew_name=?;";
+    private static final String SELECT_CREW_MEMBERS_BY_CREW_NAME =
+            "SELECT * " +
+                    "FROM crew_members " +
+                    "LEFT JOIN (crews_crew_members JOIN crew USING (crew_name)) " +
+                    "USING (crew_members_id) WHERE crew_name=?;";
 
     private final DataSource dataSource;
 
-    public CrewDaoImp(DataSource dataSource) {
+    public CrewDaoImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -40,16 +40,15 @@ public class CrewDaoImp implements CrewDao {
             preparedStatement.setInt(1, crew.getId());
             preparedStatement.setInt(2, crewMember.getId());
         } catch (SQLException e) {
-            throw new DaoOperationException("Couldn't save  CrewMember " + crewMember, e);
+            throw new DaoOperationException("Couldn't update CrewMember's crewId " + crew.getId());
         }
     }
 
-    public List<CrewMember> findCrewMembersById(int idCrew) {
-        List<CrewMember> list;
+    public List<CrewMember> findCrewMembersById(int crewId) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_CREW_MEMBERS_BY_CREW__ID)) {
-            list = new ArrayList<>();
-            preparedStatement.setInt(1, idCrew);
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_CREW_MEMBERS_BY_CREW_ID)) {
+            List<CrewMember> list = new ArrayList<>();
+            preparedStatement.setInt(1, crewId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 CrewMember crewMember = parseRow(resultSet);
@@ -59,14 +58,12 @@ public class CrewDaoImp implements CrewDao {
         } catch (SQLException e) {
             throw new DaoOperationException("Can not perform select CrewMembers by id query", e);
         }
-
     }
 
     public List<CrewMember> findCrewMembersByName(String nameCrew) {
-        List<CrewMember> list;
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_CREW_MEMBERS_BY_CREW__NAME)) {
-            list = new ArrayList<>();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_CREW_MEMBERS_BY_CREW_NAME)) {
+            List<CrewMember> list = new ArrayList<>();
             preparedStatement.setString(1, nameCrew);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -77,7 +74,6 @@ public class CrewDaoImp implements CrewDao {
         } catch (SQLException e) {
             throw new DaoOperationException("Can not perform select CrewMembers by id query", e);
         }
-
     }
 
     private CrewMember parseRow(ResultSet resultSet) {
