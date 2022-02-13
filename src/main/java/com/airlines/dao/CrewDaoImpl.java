@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CrewDaoImpl implements CrewDao {
-        private static final String INSERT_CREWS_CREW_MEMBERS = "INSERT INTO crews_crew_members (crew_id, crew_member_id) VALUES(?, ?)";
+    private static final String INSERT_CREWS_CREW_MEMBERS = "INSERT INTO crews_crew_members (crew_id, crew_member_id) VALUES(?, ?)";
     private static final String SELECT_CREW_MEMBERS_BY_CREW_ID = "SELECT * FROM crew_members LEFT JOIN crews_crew_members " +
             "ON crew_members.id = crews_crew_members.crew_member_id WHERE crews_crew_member.crew_id = ?";
     private static final String SELECT_CREW_MEMBERS_BY_CREW_NAME = "SELECT * FROM crew_members LEFT JOIN crews_crew_members " +
