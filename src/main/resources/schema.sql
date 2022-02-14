@@ -23,8 +23,8 @@ CREATE TABLE airplanes
     manufacture_date DATE        NOT NULL,
     capacity         INT         NOT NULL,
     flight_range     INT         NOT NULL,
-    crews_id         INT,
-    CONSTRAINT FK_airplanes_crews FOREIGN KEY (crews_id) REFERENCES crews (id)
+    crew_id         INT,
+    CONSTRAINT FK_airplanes_crews FOREIGN KEY (crew_id) REFERENCES crews (id)
 );
 
 CREATE TABLE crew_members
@@ -40,9 +40,9 @@ CREATE TABLE crew_members
 
 CREATE TABLE crews_crew_members
 (
-    crews_id        INT NOT NULL,
-    crew_members_id INT NOT NULL,
-    PRIMARY KEY (crews_id, crew_members_id),
-    CONSTRAINT FK_crew_members_id FOREIGN KEY (crew_members_id) REFERENCES crew_members (id),
-    CONSTRAINT FK_crews_crew_members FOREIGN KEY (crews_id) REFERENCES crews (id)
+    crew_id        INT NOT NULL,
+    crew_member_id INT NOT NULL,
+    PRIMARY KEY (crew_id, crew_member_id),
+    CONSTRAINT FK_crew_members_id FOREIGN KEY (crew_member_id) REFERENCES crew_members (id),
+    CONSTRAINT FK_crews_crew_members FOREIGN KEY (crew_id) REFERENCES crews (id)
 );
