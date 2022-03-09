@@ -12,9 +12,9 @@ public interface AirplaneDao {
 
     List<Airplane> findAll();
 
-    boolean deleteAirplane(int id);
+    boolean deleteAirplane(int crewName);
 
-    List<Airplane> searchAirplanes(String nameCrew);
+    List<Airplane> searchAirplanes(String crewId);
 
     void updateAirplane(Airplane airplane, int crews_id);
 

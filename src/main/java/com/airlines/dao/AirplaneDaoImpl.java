@@ -115,10 +115,10 @@ public class AirplaneDaoImpl implements AirplaneDao {
                 .withId(resultSet.getInt("id"))
                 .withCodeName(resultSet.getString("code_name"))
                 .withModel(Model.valueOf(resultSet.getString("model")))
-                .withManufacture(resultSet.getDate("manufactureDate").toLocalDate())
+                .withManufacture(resultSet.getDate("manufacture_date").toLocalDate())
                 .withCapacity(resultSet.getInt("capacity"))
-                .withFlightRange(resultSet.getInt("flightRange"))
-                .withCrewId(resultSet.getInt("crewId"))
+                .withFlightRange(resultSet.getInt("flight_range"))
+                .withCrewId(resultSet.getInt("crew_id"))
                 .build();
     }
 
