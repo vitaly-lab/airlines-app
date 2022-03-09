@@ -25,7 +25,11 @@ public class AirplaneDaoImpl implements AirplaneDao {
             "ON airplanes.crews_id = crews.id WHERE crews.name = ?";
     private static final String UPDATE_AIRPLANE_CREWS_SQL = "UPDATE airplanes SET crew_id = ? WHERE id = ?;";
 
-    private DataSource dataSource;
+    private final DataSource dataSource;
+
+    public AirplaneDaoImpl(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Override
     public void save(Airplane airplane) {
@@ -40,7 +44,7 @@ public class AirplaneDaoImpl implements AirplaneDao {
         PreparedStatement insertStatement = prepareInsertStatement(connection, airplane);
         executeUpdate(insertStatement, "Airplane was not created");
         int id = fetchGeneratedId(insertStatement);
-        CrewMember.builder().withId(id).build();
+        Airplane.builder().withId(id).build();
     }
 
     private PreparedStatement prepareInsertStatement(Connection connection, Airplane airplane) {
@@ -56,11 +60,11 @@ public class AirplaneDaoImpl implements AirplaneDao {
             throws SQLException {
         insertStatement.setString(1, airplane.getCodeName());
         insertStatement.setString(2, airplane.getCodeName());
-        insertStatement.setString(2, String.valueOf(airplane.getModel()));
+        insertStatement.setString(3, String.valueOf(airplane.getModel()));
         insertStatement.setDate(4, Date.valueOf(airplane.getManufacture()));
         insertStatement.setInt(5, airplane.getCapacity());
-        insertStatement.setInt(5, airplane.getFlightRange());
-        insertStatement.setInt(5, airplane.getCrews_id());
+        insertStatement.setInt(6, airplane.getFlightRange());
+        insertStatement.setInt(7, airplane.getCrews_id());
         return insertStatement;
     }
 
@@ -109,7 +113,7 @@ public class AirplaneDaoImpl implements AirplaneDao {
     private Airplane parseRow(ResultSet resultSet) throws SQLException {
         return Airplane.builder()
                 .withId(resultSet.getInt("id"))
-                .withCodeName(resultSet.getString("codeName"))
+                .withCodeName(resultSet.getString("code_name"))
                 .withModel(Model.valueOf(resultSet.getString("model")))
                 .withManufacture(resultSet.getDate("manufactureDate").toLocalDate())
                 .withCapacity(resultSet.getInt("capacity"))
@@ -125,7 +129,7 @@ public class AirplaneDaoImpl implements AirplaneDao {
             ResultSet resultSet = statement.executeQuery(SELECT_ALL_AIRPLANE_SQL);
             return collectToList(resultSet);
         } catch (SQLException e) {
-            throw new DaoOperationException(e.getMessage());
+            throw new DaoOperationException("Can not perform find all operation", e);
         }
     }
 
@@ -143,19 +147,18 @@ public class AirplaneDaoImpl implements AirplaneDao {
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(DELETE_AIRPLANE_SQL);
             statement.setInt(1, id);
-            rowDeleted = statement.executeUpdate() > 0;
-            return rowDeleted;
+            return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DaoOperationException(e.getMessage());
         }
     }
 
     @Override
-    public List<Airplane> searchAirplanes(String nameCrew) {
+    public List<Airplane> searchAirplanes(String crewName) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_CREW_MEMBERS_BY_CREW_NAME)) {
             List<Airplane> list = new ArrayList<>();
-            preparedStatement.setString(1, nameCrew);
+            preparedStatement.setString(1, crewName);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Airplane airplane = parseRow(resultSet);
@@ -167,12 +170,12 @@ public class AirplaneDaoImpl implements AirplaneDao {
         }
     }
 
-    public void updateAirplane(Airplane airplane, int crews_id) {
+    public void updateAirplane(Airplane airplane, int crewId) {
         try (Connection connection = dataSource.getConnection()) {
-            PreparedStatement updateStatement = prepareUpdateStatement(airplane, crews_id, connection);
+            PreparedStatement updateStatement = prepareUpdateStatement(airplane, crewId, connection);
             executeUpdate(updateStatement, "Airplane was not updated");
         } catch (SQLException e) {
-            throw new DaoOperationException(e.getMessage());
+            throw new DaoOperationException(String.format("Can not update airplane with id = %d", crewId), e);
         }
     }
 
@@ -183,7 +186,7 @@ public class AirplaneDaoImpl implements AirplaneDao {
             updateStatement.setInt(1, id);
             return updateStatement;
         } catch (SQLException e) {
-            throw new DaoOperationException(e.getMessage());
+            throw new DaoOperationException("Cannot prepare statement to update Airplane", e);
         }
     }
 }
