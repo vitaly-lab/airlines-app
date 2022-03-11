@@ -142,11 +142,11 @@ public class AirplaneDaoImpl implements AirplaneDao {
         return accountList;
     }
 
-    public boolean deleteAirplane(int id) {
+    public boolean deleteAirplane(int crewId) {
         boolean rowDeleted;
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(DELETE_AIRPLANE_SQL);
-            statement.setInt(1, id);
+            statement.setInt(1, crewId);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DaoOperationException(e.getMessage());
