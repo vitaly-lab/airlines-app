@@ -88,7 +88,12 @@ public class Airplane {
             return this;
         }
 
-        public Builder withFlightRange(int crewId) {
+        public Builder withFlightRange(int flightRange) {
+            this.flightRange = flightRange;
+            return this;
+        }
+
+        public Builder withCrewId(int crewId) {
             this.crewId = crewId;
             return this;
         }

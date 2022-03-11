@@ -128,7 +128,7 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
         try {
             PreparedStatement updateStatement = connection.prepareStatement(UPDATE_CREW_MEMBER_SQL);
             fillStatementWithAccountData(updateStatement, crewMember);
-            updateStatement.setLong(7, crewMember.getId());
+            updateStatement.setLong(1, crewMember.getId());
             return updateStatement;
         } catch (SQLException e) {
             throw new DaoOperationException(String.format("Cannot prepare update statement for Сrewmember id = %d", crewMember.getId()), e);
